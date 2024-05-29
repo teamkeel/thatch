@@ -32,7 +32,7 @@ model Plan {
             decision,
         )
         delete deletePlan(id)
-        list listPlans(offExchangeAvailable?, brokerAppointed?) {
+        list listPlans(gtmStatus?, state?) {
             @sortable(
                 name,
                 state
