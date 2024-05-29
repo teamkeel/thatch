@@ -1,0 +1,6 @@
+# See https://docs.keel.so/envvars for more info
+environment:
+
+# # See https://docs.keel.so/secrets for more info
+secrets:
+ - name: SLACK_URL

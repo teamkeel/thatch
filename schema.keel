@@ -1,0 +1,151 @@
+// Visit https://docs.keel.so/ for documentation on how to get started
+model Plan {
+    fields {
+        name Text
+        state State
+        offExchangeAvailable Boolean
+        brokerAppointed Boolean
+        operationalWork Number
+        gtmStatus GtmStatus @default(GtmStatus.Pending)
+        preTaxPremiumAllowed Boolean?
+        decision PlanPath
+    }
+
+    actions {
+        create createPlan() with (
+            name,
+            state,
+            offExchangeAvailable,
+            brokerAppointed,
+            operationalWork,
+            gtmStatus,
+            decision,
+        )
+        get getPlan(id)
+        update updatePlan(id) with (
+            name,
+            state,
+            offExchangeAvailable,
+            brokerAppointed,
+            operationalWork,
+            gtmStatus,
+            decision,
+        )
+        delete deletePlan(id)
+        list listPlans(offExchangeAvailable?, brokerAppointed?) {
+            @sortable(
+                name,
+                state
+            )
+        }
+    }
+
+    @on(
+        [create],
+        slackmessage
+    )
+
+    @permission(
+        actions: [create, get, update, list],
+        expression: true
+    )
+
+    @permission(
+        actions: [delete],
+        roles: [Admin]
+    )
+}
+
+model User {
+    fields {
+        name Text
+        email Text @unique
+        identity Identity @unique
+    }
+
+    actions {
+        create createUser() with (name, email) {
+            @set(user.identity = ctx.identity)
+        }
+        list listUser()
+    }
+}
+
+role Staff {
+    domains {
+        "keel.xyz"
+    }
+}
+
+role Admin {
+    domains {
+        "benoit@keel.xyz"
+    }
+}
+
+enum State {
+    Alabama
+    Alaska
+    Arizona
+    Arkansas
+    California
+    Colorado
+    Connecticut
+    Delaware
+    Florida
+    Georgia
+    Hawaii
+    Idaho
+    Illinois
+    Indiana
+    Iowa
+    Kansas
+    Kentucky
+    Louisiana
+    Maine
+    Maryland
+    Massachusetts
+    Michigan
+    Minnesota
+    Mississippi
+    Missouri
+    Montana
+    Nebraska
+    Nevada
+    NewHampshire
+    NewJersey
+    NewMexico
+    NewYork
+    NorthCarolina
+    NorthDakota
+    Ohio
+    Oklahoma
+    Oregon
+    Pennsylvania
+    RhodeIsland
+    SouthCarolina
+    SouthDakota
+    Tennessee
+    Texas
+    Utah
+    Vermont
+    Virginia
+    Washington
+    WestVirginia
+    Wisconsin
+    Wyoming
+}
+
+enum GtmStatus {
+    Pending
+    Inactive
+    Active
+}
+
+enum PlanPath {
+    Path1
+    Path2
+    Path3
+    Path4
+    Path5
+}
